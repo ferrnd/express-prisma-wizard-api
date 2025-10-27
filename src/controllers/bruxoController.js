@@ -79,7 +79,7 @@ export const criar = async (req, res) => {
         }
 
         const novoBruxo = await bruxoModel.criar(req.body);
-        res.status(2001).json({
+        res.status(201).json({
             message: "Wizard creted sucessfull!",
             bruxo: novoBruxo,
         });
@@ -93,9 +93,9 @@ export const criar = async (req, res) => {
 
 export const deletar = async (req, res) => {
     try {
-        const id = parseInt(eq.params.id);
+        const id = parseInt(req.params.id);
 
-        const bruxoExiste = await bruxoModel.get.encontreUm(id);
+        const bruxoExiste = await bruxoModel.encontreUm(id);
 
         if (!bruxoExiste) {
             return res.status(404).json({

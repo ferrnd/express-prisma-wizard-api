@@ -12,7 +12,7 @@ export const encontreTodos = async () => {
     return await prisma.bruxo.findMany({ orderBy: { id: "asc" } });
 };
 
-export const encontreUm = async () => {
+export const encontreUm = async (id) => {
     //SELECT * FROM bruxos WHERE id = 1;
     return await prisma.bruxo.findUnique({
         where: { id: Number(id) },
