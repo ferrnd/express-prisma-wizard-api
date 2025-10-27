@@ -91,30 +91,65 @@ export const criar = async (req, res) => {
     }
 };
 
-export const deletar = async (req,res) => {
+export const deletar = async (req, res) => {
     try {
         const id = parseInt(eq.params.id);
 
         const bruxoExiste = await bruxoModel.get.encontreUm(id);
 
-        if (!bruxoExiste){
+        if (!bruxoExiste) {
             return res.status(404).json({
-                error: 'Wizard not find wich this id',
-                id: id
-            })
+                error: "Wizard not find wich this id",
+                id: id,
+            });
         }
 
         await bruxoModel.deletar(id);
 
         res.status(200).json({
-            message: 'Wizard deleted sucessfull'
-        })
-        
+            message: "Wizard deleted sucessfull",
+        });
     } catch (error) {
         res.status(500).json({
-            error: 'error deleting wizard',
-            details: error.message
-        })
-        
+            error: "error deleting wizard",
+            details: error.message,
+        });
     }
-}
+};
+
+export const atualizar = async (req, res) => {
+    try {
+        const id = parseInt(req.params.id);
+        const dados = req.body;
+
+        const bruxoExiste = await bruxoModel.encontreUm(id);
+
+        if (!bruxoExiste) {
+            return res.status(404).json({
+                error: "Wizard do not exist",
+                id: id,
+            });
+        }
+
+        if (dados.casa) {
+        const casasValidas = ["Grifinória", "Sonserina", "Corvinal", "Lufa-Lufa"];
+        if (!casasValidas.includes(dados.casa)) {
+            return res.status(400).json({
+                erro: "Invalid house! The Sorting Hat only recognizes the 4 houses",
+                casasValidas,
+            });
+        }
+    }
+
+        const bruxoAtualizado = await bruxoModel.atualizar(id, dados);
+        res.status(200).json({
+            message: "Wizard updated sucessfull",
+            bruxo: bruxoAtualizado,
+        });
+    } catch (error) {
+        res.status(500).json({
+            error: "Error to update wizard",
+            details: error.message,
+        });
+    }
+};
